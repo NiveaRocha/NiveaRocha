@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações de Unidades</title>
+    <!-- Inclui o Tailwind CSS para estilos rápidos e responsivos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a fonte Inter para todo o corpo da página */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex items-center justify-center p-4">
+    <!-- Contêiner principal da aplicação, centralizado e com sombra -->
+    <div class="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full text-center">
+        <h1 class="text-4xl font-extrabold text-gray-800 mb-6">
+            Unidades
+        </h1>
+        <p class="text-lg text-gray-600 mb-6">
+            Selecione uma Unidade para ver suas informações.
+        </p>
+
+        <!-- Dropdown para seleção de cidades -->
+        <div class="mb-8">
+            <label for="citySelect" class="block text-gray-700 text-sm font-bold mb-2">
+                Escolha uma Unidade:
+            </label>
+            <select
+                id="citySelect"
+                class="shadow appearance-none border rounded-full w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-200 ease-in-out"
+            >
+                <option value="">-- Selecione --</option>
+                <!-- As opções serão preenchidas via JavaScript -->
+            </select>
+        </div>
+
+        <!-- Área para exibir as informações da cidade -->
+        <div id="cityInfo" class="bg-blue-50 p-6 rounded-lg border border-blue-200 text-left hidden">
+            <h2 id="cityName" class="text-2xl font-bold text-blue-800 mb-3"></h2>
+            <p class="text-gray-700 mb-2">
+                <span class="font-semibold">Coordenador:</span> <span id="cityPopulation"></span>
+            </p>
+            <p class="text-gray-700 mb-2">
+                <span class="font-semibold">Gerente:</span> <span id="cityState"></span>
+            </p>
+            <p class="text-gray-700">
+                <span class="font-semibold">Calendario:</span> <span id="cityDescription"></span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Dados das cidades (simulando uma planilha)
+        // Em uma aplicação real, estes dados viriam de um banco de dados ou API.
+        const citiesData = [
+            { Codigo: 'AD01', name: 'Açailandia', population: 'Karla Carolina de Oliveira Rodrigues', state: 'Anderson Cristiano', description: 'Nívea Rocha' },
+            { Codigo: 'AG01', name: 'Araguaína', population: 'Kelly Cristina Pereira Da Silva', state: 'Nayandra Costa', description: 'Nívea Rocha' },
+            { Codigo: 'BB01', name: 'Bacabal', population: 'Anderson Cristiano Lopes de Sousa', state: 'Anderson Cristiano', description: 'Janayna Rocha' },
+            { Codigo: 'BE01', name: 'Barreiras', population: 'Maria De Fatima Franca dos Santos', state: 'Elias Serafim', description: 'Anna Maryelle' },
+            { Codigo: 'BD01', name: 'Brumado', population: 'Gisela Victoria da Silva Costa', state: 'Layza Tanielissa', description: 'Vinícius Souza' },
+            { Codigo: 'AL01', name: 'Maceió', population: 'Ygor Valenca de Araujo', state: 'Euclides Cunha', description: 'Janayna Rocha' }
+        ];
+
+        // Obtém referências para os elementos HTML
+        const citySelect = document.getElementById('citySelect');
+        const cityInfoDiv = document.getElementById('cityInfo');
+        const cityName = document.getElementById('cityName');
+        const cityPopulation = document.getElementById('cityPopulation');
+        const cityState = document.getElementById('cityState');
+        const cityDescription = document.getElementById('cityDescription');
+
+        // Função para preencher o dropdown com as cidades
+        function populateCitySelect() {
+            citiesData.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.Codigo; // O valor da opção será o ID da cidade
+                option.textContent = city.name; // O texto visível será o nome da cidade
+                citySelect.appendChild(option);
+            });
+        }
+
+        // Função para exibir as informações da cidade selecionada
+        function displayCityInfo(cityCodigo) {
+            // Encontra a cidade correspondente no array de dados
+            const selectedCity = citiesData.find(city => city.Codigo === cityCodigo);
+
+            if (selectedCity) {
+                // Preenche os elementos HTML com as informações da cidade
+                cityName.innerText = selectedCity.name;
+                cityPopulation.innerText = selectedCity.population;
+                cityState.innerText = selectedCity.state;
+                cityDescription.innerText = selectedCity.description;
+                cityInfoDiv.classList.remove('hidden'); // Torna a div de informações visível
+            } else {
+                // Se nenhuma cidade válida for selecionada (ex: opção "-- Selecione --")
+                cityInfoDiv.classList.add('hidden'); // Esconde a div de informações
+            }
+        }
+
+        // Adiciona um "listener" de evento ao dropdown
+        // Quando a seleção muda, a função displayCityInfo é chamada com o valor selecionado
+        citySelect.addEventListener('change', (event) => {
+            displayCityInfo(event.target.value);
+        });
+
+        // Chama a função para preencher o dropdown quando a página é carregada
+        document.addEventListener('DOMContentLoaded', populateCitySelect);
+    </script>
+</body>
+</html>
